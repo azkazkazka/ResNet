@@ -5,7 +5,7 @@ import argparse
 import time
 import numpy as np
 from lfcc import extract_lfcc
-from model_fold import train_and_evaluate_model
+from model import train_and_evaluate_model
 from datetime import date
 import tensorflow as tf
 from sklearn.metrics import roc_curve
