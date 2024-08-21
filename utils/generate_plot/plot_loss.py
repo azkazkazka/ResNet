@@ -66,13 +66,13 @@ def plot_loss_per_fold(fold_data, save_folder):
         plt.title(f'Loss per Epoch for Fold {fold}')
         plt.legend()
         plt.grid(True)
-        plt.savefig(f"{save_folder}/fold_{fold}_loss_plot.png")
+        plt.savefig(f"./{save_folder}/fold_{fold}_loss_plot.png")
         plt.show()
         
 
 
-# File path to your log file
-log_file_path = './log_training_for_test.txt'
+# File path to log file
+log_file_path = '../../log_training_for_test.txt'
 
 # Parse the logs
 fold_data = parse_logs(log_file_path)

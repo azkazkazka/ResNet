@@ -1,6 +1,6 @@
 import numpy as np
 from calculate_modules import *
-from test_evaluation_metrics import calculate_minDCF_EER_CLLR_actDCF
+from utils.calculcate_metrics.test_evaluation_metrics import calculate_minDCF_EER_CLLR_actDCF
 import a_dcf
 
 def read_predictions(file_path):
@@ -29,7 +29,7 @@ def process_predictions_for_metrics(file_path):
 
 if __name__ == '__main__':
     # file_path = './prediction_per_fold/LA/final_predictions_50_16_0.001_fold-4.txt'  # Replace with your actual file path
-    file_path = './best_model/LA/test_predictions_test_only_cv_to_prosa.txt'
+    file_path = '../../best_model/LA/test_predictions_test_only_cv_to_prosa.txt'
     
     minDCF, eer, cllr, actDCF, accuracy, cm = process_predictions_for_metrics(file_path)
     print(f"minDCF: {minDCF}")

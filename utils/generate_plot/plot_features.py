@@ -33,8 +33,8 @@ def plot_lfcc_2d_tsne(audio_files, labels_dict, scenario):
     # plt.rc('figure', titlesize=36)
 
     # save to file
-    save_path_png = f"./lfcc_2d_plot_{scenario}_newest.png"
-    save_path_svg = f"./lfcc_2d_plot_{scenario}_newest.svg"
+    save_path_png = f"../../lfcc_2d_plot_{scenario}_newest.png"
+    save_path_svg = f"../../lfcc_2d_plot_{scenario}_newest.svg"
     plt.savefig(save_path_png, dpi=300, bbox_inches='tight')
     plt.savefig(save_path_svg, format='svg', bbox_inches='tight')
     # plt.savefig(save_path)
