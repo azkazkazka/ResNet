@@ -28,7 +28,7 @@ def process_predictions_for_metrics(file_path):
     return minDCF, eer, cllr, actDCF, accuracy, cm 
 
 if __name__ == '__main__':
-    # file_path = './prediction_per_fold/LA/final_predictions_50_16_0.001_fold-4.txt'  # Replace with your actual file path
+    # file_path = './prediction_per_fold/LA/final_predictions_50_16_0.001_fold-4.txt'
     file_path = '../../best_model/LA/test_predictions_test_only_cv_to_prosa.txt'
     
     minDCF, eer, cllr, actDCF, accuracy, cm = process_predictions_for_metrics(file_path)
