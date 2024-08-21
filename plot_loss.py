@@ -72,7 +72,7 @@ def plot_loss_per_fold(fold_data, save_folder):
 
 
 # File path to your log file
-log_file_path = './ALL_log_training_for_test.txt'
+log_file_path = './log_training_for_test.txt'
 
 # Parse the logs
 fold_data = parse_logs(log_file_path)
