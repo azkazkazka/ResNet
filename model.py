@@ -107,7 +107,7 @@ def train_and_evaluate_model(X_train, y_train, file_names_train, X_val, y_val, f
     except Exception as e:
         print(f"Error during training fold {fold+1}: {e}")
 
-    best_model_file_path = f'./best_model/{scenario}/best_model_{learning_rate}_{epochs}_only_prosa.h5'
+    best_model_file_path = f'./models/{scenario}/best_model_{learning_rate}_{epochs}_only_prosa.h5'
     model.save(best_model_file_path)
     print(f"Best model saved at: {best_model_file_path}")
 

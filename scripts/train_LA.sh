@@ -16,4 +16,4 @@ python -u ../main.py --mode train --scenario LA --base_path ${base_path} > $PWD/
 
 echo -e "Training process finished"
 echo -e "Fold predictions are in ./predictions/LA directory"
-echo -e "Models are in /best_model/LA directory"
+echo -e "Models are in /models/LA directory"

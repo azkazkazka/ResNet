@@ -117,7 +117,7 @@ def plot_eers(param, param_eers, scenario):
     plt.savefig(f'./tuning_epochs_{scenario}.png')
 
 def save_checkpoint(param_val, model, scenario, param_name):
-    model.save(f'./best_model/{scenario}/model_{param_name}_{param_val}.h5')
+    model.save(f'./models/{scenario}/model_{param_name}_{param_val}.h5')
     print(f"Model checkpoint saved for param {param_name}")
 
 def train_model(args):
