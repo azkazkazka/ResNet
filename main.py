@@ -6,7 +6,6 @@ import time
 import numpy as np
 from lfcc import extract_lfcc
 from model import train_and_evaluate_model
-from datetime import date
 from sklearn.metrics import roc_curve
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -161,9 +160,6 @@ def train_model(args):
         batch_size = [16]
         epochs = [50]
 
-        with open(f"model_performance_{scenario}_{timestamp}.txt", "a") as perf_file:
-            perf_file.write(f"\n{date.today()}")
-
         for e in epochs:
             print(f"Training with epochs: {e}")
             all_histories, eers = train_and_evaluate_model(X_train, y_train, train_audio_files, X_val, y_val, val_audio_files, scenario, epochs=e, batch_size=batch_size[0], learning_rate=learning_rate[0], n_splits=fold)
@@ -255,18 +251,4 @@ def main():
         evaluate_model(args)
 
 if __name__ == "__main__":
-    # Check and configure GPU
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    if gpus:
-        try:
-            # Since only GPU 3 is visible, it will be treated as GPU 0
-            for gpu in gpus:
-                tf.config.experimental.set_memory_growth(gpu, True)
-            logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-        except RuntimeError as e:
-            print(e)
-
-    print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-    print("Is the GPU available: ", tf.test.is_gpu_available())
     main()

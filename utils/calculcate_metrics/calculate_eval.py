@@ -1,7 +1,9 @@
+import argparse
 import numpy as np
 from calculate_modules import *
-from utils.calculcate_metrics.test_evaluation_metrics import calculate_minDCF_EER_CLLR_actDCF
+from calculate_metrics import calculate_minDCF_EER_CLLR_actDCF
 import a_dcf
+from datetime import datetime
 
 def read_predictions(file_path):
     """Read predictions from the given file path and return true labels and scores."""
@@ -18,23 +20,45 @@ def read_predictions(file_path):
 def process_predictions_for_metrics(file_path):
     """Process predictions and calculate metrics using the calculate_minDCF_EER_CLLR_actDCF function."""
     y_true, y_scores = read_predictions(file_path)
-    print(y_scores[:5])
     # Convert y_true to binary labels (0 or 1)
     y_true = np.array([1 if label > 0 else 0 for label in y_true])
     
-    # Calculate metrics using the provided function
+    # Calculate metrics using the function from calculate_metrics module
     minDCF, eer, cllr, actDCF, accuracy, cm  = calculate_minDCF_EER_CLLR_actDCF(y_scores, y_true)
     
     return minDCF, eer, cllr, actDCF, accuracy, cm 
 
 if __name__ == '__main__':
-    # file_path = './prediction_per_fold/LA/final_predictions_50_16_0.001_fold-4.txt'
-    file_path = '../../best_model/LA/test_predictions_test_only_cv_to_prosa.txt'
-    
-    minDCF, eer, cllr, actDCF, accuracy, cm = process_predictions_for_metrics(file_path)
-    print(f"minDCF: {minDCF}")
-    print(f"EER: {eer}")
-    print(f"CLLR: {cllr}")
-    print(f"actDCF: {actDCF}")
-    print(f"accuracy: {accuracy}")
-    print(f"cm: {cm}")
+    parser = argparse.ArgumentParser()
+    # set files to scores and the scenario type
+    parser.add_argument('--scenario', type=str, required=True)
+    parser.add_argument('--scores', type=str, required=True)
+    parser.add_argument('--output_filename', type=str, default="result_%s" % datetime.now().strftime("%Y-%m-%d_%H:%M:%S"), help="Output file path to write results (without extension)")
+
+    args = parser.parse_args()
+
+    minDCF, eer, cllr, actDCF, accuracy, cm = process_predictions_for_metrics(args.scores)
+
+    output_file_name = ("./results/%s/%s.txt" % (args.scenario, args.output_filename))
+
+    # Write the results to a file
+    with open(output_file_name, 'w') as f:
+        f.write('\nCM SYSTEM\n')
+        f.write('\tmin DCF \t\t= {} '
+                    '(min DCF for countermeasure)\n'.format(
+                        minDCF))
+        f.write('\tEER\t\t= {:8.9f} % '
+                    '(EER for countermeasure)\n'.format(
+                        eer * 100))
+        f.write('\tCLLR\t\t= {:8.9f} bits '
+                '(CLLR for countermeasure)\n'.format(
+                    cllr))
+        f.write('\tactDCF\t\t= {:} '
+                '(actual DCF)\n'.format(
+                    actDCF))
+        f.write('\taccuracy\t\t= {:} '
+                '(accuracy)\n'.format(
+                    accuracy))
+        f.write('\tConfusion Matrix\t\t= ')
+        f.write("\t" + str(cm))
+

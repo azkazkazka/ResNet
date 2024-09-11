@@ -16,9 +16,6 @@ def calculate_minDCF_EER_CLLR_actDCF(cm_scores, cm_keys):
     Primary metrics: min DCF,
     Secondary metrics: EER, CLLR, actDCF
     """
-
-    print(cm_scores[:5])
-    print(cm_keys[:5])
     
     Pspoof = 0.05
     dcf_cost_model = {
@@ -51,24 +48,5 @@ def calculate_minDCF_EER_CLLR_actDCF(cm_scores, cm_keys):
     minDCF_cm, _ = compute_mindcf(frr, far, thresholds, Pspoof, dcf_cost_model['Cmiss'], dcf_cost_model['Cfa'])
     # actual DCF
     actDCF, thres = compute_actDCF(bona_cm, spoof_cm, Pspoof, dcf_cost_model['Cmiss'], dcf_cost_model['Cfa'])
-
-    print('\nCM SYSTEM\n')
-    print('\tmin DCF \t\t= {} '
-                '(min DCF for countermeasure)\n'.format(
-                    minDCF_cm))
-    print('\tEER\t\t= {:8.9f} % '
-                '(EER for countermeasure)\n'.format(
-                    eer_cm * 100))
-    print('\tCLLR\t\t= {:8.9f} bits '
-                '(CLLR for countermeasure)\n'.format(
-                    cllr_cm))
-    print('\tactDCF\t\t= {:} '
-                '(actual DCF)\n'.format(
-                    actDCF))
-    print('\taccuracy\t\t= {:} '
-                '(accuracy)\n'.format(
-                    accuracy))
-    print('\confusion matrix\t\t= ')
-    print(cmatrix)
 
     return minDCF_cm, eer_cm, cllr_cm, actDCF, accuracy, cmatrix
