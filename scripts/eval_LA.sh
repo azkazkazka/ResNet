@@ -1,17 +1,20 @@
+log_name=log_eval
+base_path=path_to_dataset
+trained_network=path_to_model.h5
+output_filename=results
+
 echo -e "Evaluation process started"
-echo -e "Check the logs in /log/LA directory"
 
 echo -e
 echo -e
 
-echo -e "Train log: ~/speech/RESNET/log/LA/solo_log_evaluation_test_only_prosa_to_cv.txt"
-echo -e "Error log: ~/speech/RESNET/log/LA/solo_log_evaluation_test_only_prosa_to_cv_err.txt"
+echo -e Train log: $PWD/${log_name}.txt
+echo -e Error log: $PWD/${log_name}_err.txt
 
 echo -e
 echo -e
 
-CUDA_VISIBLE_DEVICES=3 python -u ../main.py --mode eval --scenario LA --trained_network ~/speech/RESNET/best_model/LA/best_model_0.001_50_only_prosa.h5  > ./log/LA/solo_log_evaluation_test_only_prosa_to_cv.txt 2> ./log/LA/solo_log_evaluation_test_only_prosa_to_cv_err.txt
+python -u ../main.py --mode eval --scenario LA --trained_network ${trained_network} --base_path ${base_path} --output_filename ${output_filename} > $PWD/log/LA/${log_name}.txt 2> $PWD/log/LA/${log_name}_err.txt
 
 echo -e "Evaluation process finished"
-echo -e "Predictions are in /log_prediction/LA directory"
-echo -e "Models are in /best_model/LA directory"
+echo -e "Final predictions are in /predictions/LA directory"

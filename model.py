@@ -42,7 +42,7 @@ def build_resnet34():
 
 def log_predictions(model, X_val, y_val, file_names, scenario, epoch, batch_size, learning_rate, fold):
     predictions = model.predict(X_val)
-    output_path = f"./prediction_per_fold/{scenario}/final_predictions_{epoch}_{batch_size}_{learning_rate}_fold-{fold}_for_test.txt"
+    output_path = f"./predictions/{scenario}/final_predictions_{epoch}_{batch_size}_{learning_rate}_fold-{fold}_for_test.txt"
     with open(output_path, 'w') as f:
         for idx, prediction in enumerate(predictions):
             filename = file_names[idx]

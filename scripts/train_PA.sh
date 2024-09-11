@@ -1,17 +1,19 @@
+log_name=log_train
+base_path=path_to_dataset
+
 echo -e "Training process started"
-echo -e "Check the logs in /log/PA directory"
 
 echo -e
 echo -e
 
-echo -e "Train log: ~/speech/RESNET/log/PA/log_training_only_prosa.txt"
-echo -e "Error log: ~/speech/RESNET/log/PA/log_training_only_prosa_err.txt"
+echo -e Train log: $PWD/log/LA/${log_name}.txt
+echo -e Error log: $PWD/log/LA/${log_name}_err.txt
 
 echo -e
 echo -e
 
-CUDA_VISIBLE_DEVICES=3 python -u ../main.py --mode train --scenario PA > ./log/PA/log_training_only_prosa.txt 2> ./log/PA/log_training_only_prosa_err.txt
+python -u ../main.py --mode train --scenario PA --base_path ${base_path} > $PWD/log/PA/${log_name}.txt 2> $PWD/log/PA/${log_name}_err.txt
 
 echo -e "Training process finished"
-echo -e "Predictions are in ./log_prediction/PA directory"
+echo -e "Fold predictions are in ./predictions/PA directory"
 echo -e "Models are in /best_model/PA directory"

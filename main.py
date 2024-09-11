@@ -10,6 +10,7 @@ from sklearn.metrics import roc_curve
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import pickle
+from datetime import datetime
 
 
 def read_file(train_file_path):
@@ -96,14 +97,14 @@ def calculate_eer(y_true, y_scores):
     eer = (fpr[eer_threshold_index] + fnr[eer_threshold_index]) / 2
     return eer
 
-def load_and_predict(best_model_path, X_test, y_test, file_names, scenario):
+def load_and_predict(best_model_path, X_test, y_test, file_names, prediction_output_path):
     model = tf.keras.models.load_model(best_model_path)
     predictions = model.predict(X_test)
-    with open(f'./best_model/{scenario}/test_predictions_test_only_prosa.txt', 'w') as f:
+    with open(prediction_output_path, 'w') as f:
         for idx, prediction in enumerate(predictions):
             filename = file_names[idx]
             f.write(f"{filename} - Predicted: {prediction[0]:.1f} - Actual: {y_test[idx]}\n")
-    print(f"Predictions logged successfully to ./best_model/{scenario}/test_predictions_test_only_prosa.txt")
+    print(f"Predictions logged successfully to {prediction_output_path}")
 
 def plot_eers(param, param_eers, scenario):
     plt.figure(figsize=(10, 5))
@@ -123,7 +124,7 @@ def train_model(args):
     start = time.time()
 
     scenario = args.scenario
-    base_path = f"/home/sarah.azka/speech/NEW_DATA_{scenario}"
+    base_path = args.base_path
     data_path = os.path.join(base_path, "train_val")
     protocol_path = os.path.join(base_path, "protocol.txt")
     train_list = os.path.join(base_path, "train_prosa_only.lst")
@@ -166,7 +167,7 @@ def train_model(args):
             epochs_eers.append(np.mean(eers))
 
             for i in range(fold):
-                predictions_file = f"./prediction_per_fold/{scenario}/final_predictions_{e}_{batch_size[0]}_{learning_rate[0]}_fold-{i+1}_for_test.txt"
+                predictions_file = f"./predictions/{scenario}/final_predictions_{e}_{batch_size[0]}_{learning_rate[0]}_fold-{i+1}_for_test.txt"
                 eer = process_predictions_for_eer(predictions_file)
                 eers.append(eer)
 
@@ -202,7 +203,7 @@ def train_model(args):
 
 def evaluate_model(args):
     scenario = args.scenario
-    base_path = f"/home/sarah.azka/speech/NEW_DATA_{scenario}"
+    base_path = args.base_path
     data_path = os.path.join(base_path, "test")
     protocol_path = os.path.join(base_path, "protocol.txt")
     test_list = os.path.join(base_path, "test_prosa_only.lst")
@@ -222,12 +223,11 @@ def evaluate_model(args):
 
         print(f"Test data shapes: {features.shape}")
 
+        prediction_output_path = f"./predictions/{scenario}/{args.output_filename}.txt"
+
         model_name = args.trained_network
         print(f"Predicting using the following model: {model_name}")
-        load_and_predict(model_name, features, labels, test_filenames, scenario)
-        predictions_file = f"./best_model/{scenario}/test_predictions_test_only_prosa.txt"
-        eer = process_predictions_for_eer(predictions_file)
-        print(f"Final EER: {eer}")
+        load_and_predict(model_name, features, labels, test_filenames, prediction_output_path)
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
@@ -238,11 +238,10 @@ def main():
     parser.add_argument('--ext', type=str, default='wav')
     parser.add_argument('--mode', type=str, default='train', choices=['train', 'eval'])
     parser.add_argument('--trained_network', type=str, default='None')
+    parser.add_argument('--base_path', type=str, required=True)
+    parser.add_argument('--output_filename', type=str, default="result_%s" % datetime.now().strftime("%Y-%m-%d_%H:%M:%S"))
     args = parser.parse_args()
 
-    print("MULAI")
-
-    print(args.mode)
     if args.mode == 'train':
         train_model(args)
     elif args.mode == 'eval':

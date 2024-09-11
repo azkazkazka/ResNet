@@ -1,17 +1,20 @@
+log_name=log_eval
+base_path=path_to_dataset
+trained_network=path_to_model.h5
+output_filename=results
+
 echo -e "Evaluation process started"
-echo -e "Check the logs in /log/PA directory"
 
 echo -e
 echo -e
 
-echo -e "Train log: ~/speech/RESNET/log/PA/log_evaluation_for_test.txt"
-echo -e "Error log: ~/speech/RESNET/log/PA/log_evaluation_for_test_err.txt"
+echo -e Train log: $PWD/${log_name}.txt
+echo -e Error log: $PWD/${log_name}_err.txt
 
 echo -e
 echo -e
 
-CUDA_VISIBLE_DEVICES=3 python -u ../main.py --mode eval --scenario PA --trained_network ~/speech/RESNET/best_model/PA/best_model_0.001_50_only_prosa.h5  > ./log/PA/log_evaluation_for_test.txt 2> ./log/PA/log_evaluation_for_test_err.txt
+python -u ../main.py --mode eval --scenario PA --trained_network ${trained_network} --base_path ${base_path} --output_filename ${output_filename} > $PWD/log/PA/${log_name}.txt 2> $PWD/log/PA/${log_name}_err.txt
 
 echo -e "Evaluation process finished"
-echo -e "Predictions are in /log_prediction/PA directory"
-echo -e "Models are in /best_model/PA directory"
+echo -e "Final predictions are in /predictions/LA directory"
